@@ -35,6 +35,22 @@ Route::prefix('auth')->group(function() {
 Route::middleware('auth:a')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+/** Laravel Response  */
+Route::get('/api-response', function(Request $request) {
+    $responseType = $request->only('type');
+    if (in_array('stringType', $responseType)) {
+        return 'I am a string response'; // converted to the full http response
+    }
+    else if (in_array('arrayType', $responseType)) {
+        return [1, 2, 3]; // converted to the json response
+    }
+    else {
+        return 'Please set the response type';
+    }
+});
+
 Route::fallback(function(){
     return response()->json([
         'success' => false,
