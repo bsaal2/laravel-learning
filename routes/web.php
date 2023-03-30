@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Services\TestService;
+use Illuminate\Http\Request;
+// use App\Services\TestService;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,24 @@ use App\Services\TestService;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+// This route show the search view page
+Route::get('/search-page', function() {
+    return view('search');
+});
+
+/**
+ * This route handles the search from the search view
+ * It tries to validate the request first
+ * If failed then redirect to same page along with the flashing of old input
+ * If we want to flash input in the custom way then we can do by using the flash() method of request
+ */
+Route::get('search', function(Request $request) {
+    $request->validate([
+        'search' => 'required|min:5'
+    ]);
+    $request->flash();
+    return view('search', ['search' => $request->old('search')]);
 });
